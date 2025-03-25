@@ -42,7 +42,7 @@ app.post("/upload", upload.single("csvFile"), (req, res) => {
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
-  res.send(`File uploaded successfully: ${req.file.filename}`);
+  res.redirect(`/read/${req.file.filename}`);
 });
 
 app.get("/read/:filename", (req, res) => {
@@ -55,9 +55,12 @@ app.get("/read/:filename", (req, res) => {
   const results = [];
   fs.createReadStream(filePath)
     .pipe(csv())
-    .on("data", (data) => results.push(data))
+    .on("data", (data) => {
+      console.log("URL:", data[Object.keys(data)[0]]); // Log each URL from CSV
+      results.push(data);
+    })
     .on("end", () => {
-      console.log("Parsed CSV Data:", results); // Log data in console
+      console.log("Finished reading CSV file.");
       res.json(results); // Send data as JSON response
     })
     .on("error", (err) =>
