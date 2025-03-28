@@ -3,9 +3,11 @@ const fs = require("fs");
 const path = require("path");
 const csv = require("csv-parser");
 const { checkRobotsTxt } = require("../utils/robotsCheck");
+const convertJsonToCsv = require("../utils/jsonToCsv");
 
 const router = express.Router();
 const uploadDir = path.join(__dirname, "../uploads");
+const downloadDir = path.join(__dirname, "../download"); // Path to download folder
 
 // Route to read CSV and check URLs
 router.get("/read/:filename", async (req, res) => {
@@ -26,8 +28,20 @@ router.get("/read/:filename", async (req, res) => {
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => {
-      const url = data["URL"] || data[Object.keys(data)[0]]; // Ensure correct column handling
-      if (url) urls.push(url);
+      let url = data["URL"] || data[Object.keys(data)[0]]; // Extract URL
+
+      if (url) {
+        url = url.trim(); // Remove spaces
+        url = url.replace(/^"(.*)"$/, "$1"); // Remove surrounding double quotes
+
+        try {
+          // Ensure valid URL format
+          const parsedUrl = new URL(url);
+          urls.push(parsedUrl.href); // Store cleaned, valid URL
+        } catch (error) {
+          console.error("❌ Invalid URL:", url, "Error:", error.message);
+        }
+      }
     })
     .on("end", async () => {
       console.log(`✅ Finished reading ${urls.length} URLs from CSV.`);
@@ -37,12 +51,47 @@ router.get("/read/:filename", async (req, res) => {
         urls.map((url) => checkRobotsTxt(url, robotsPath))
       );
 
-      res.json(results); // Send JSON response
+      const responseData = results; // Store response in a const
+
+      // Generate dynamic output filename
+      let baseFileName = req.params.filename.replace(/\.csv$/, "");
+      const outputFileName = `output-${baseFileName}.csv`;
+      const outputFilePath = path.join(downloadDir, outputFileName);
+
+      // Convert JSON response to CSV
+      convertJsonToCsv(results, outputFilePath);
+
+      // Ensure the download folder exists
+      if (!fs.existsSync(downloadDir)) {
+        fs.mkdirSync(downloadDir, { recursive: true });
+      }
+
+      // Store the output file path in session or query for downloading later
+      req.session.downloadFile = outputFileName;
+
+      // Redirect to the download page
+      res.redirect("/download.html");
+      // res.json(responseData);
     })
     .on("error", (err) => {
       console.error("❌ Error reading CSV file:", err);
       res.status(500).send("Error reading file: " + err.message);
     });
+});
+
+router.get("/download", (req, res) => {
+  const fileName = req.session.downloadFile;
+  if (!fileName) {
+    return res.status(400).send("No file available for download.");
+  }
+
+  const filePath = path.join(downloadDir, fileName);
+  res.download(filePath, fileName, (err) => {
+    if (err) {
+      console.error("❌ Error downloading file:", err.message);
+      res.status(500).send("Error downloading file.");
+    }
+  });
 });
 
 module.exports = router;

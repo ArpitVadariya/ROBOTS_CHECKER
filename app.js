@@ -1,11 +1,25 @@
 const express = require("express");
+const session = require("express-session");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const checkURLRoute = require("./routes/checkURLs"); // Import checkURL route
 
-const app = express();
 const PORT = 3000;
+const app = express();
+
+// Serve static files from "public" folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// Enable sessions
+app.use(
+  session({
+    secret: "test_secret_key", // Use a secure key in production
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  })
+);
 
 // Ensure 'uploads' folder exists
 const uploadDir = path.join(__dirname, "uploads");
