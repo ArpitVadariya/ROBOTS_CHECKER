@@ -1,11 +1,18 @@
 const axios = require("axios");
+const robotsCache = new Map(); // Store fetched robots.txt files
 
 // Function to fetch and parse robots.txt rules
 async function fetchAndParseRobotsTxt(robotsTxtUrl) {
+  if (robotsCache.has(robotsTxtUrl)) {
+    return robotsCache.get(robotsTxtUrl); // Return cached result
+  }
+
   try {
     const response = await axios.get(robotsTxtUrl);
     const robotsTxt = response.data;
-    return parseRobotsTxt(robotsTxt, "*"); // Extract rules for all user agents
+    robotsCache.set(robotsTxtUrl, parseRobotsTxt(robotsTxt, "*")); // Cache result
+    console.error(`✅ Fetched robots.txt`);
+    return robotsCache.get(robotsTxtUrl);
   } catch (error) {
     console.error(`❌ Failed to fetch robots.txt: ${error.message}`);
     return [];
@@ -91,10 +98,14 @@ async function checkRobotsTxt(url, robotsTxtUrl) {
 
   return {
     url,
-    path,
-    robotsTxtUrl,
-    rule: blockingRule || "Allowed",
+    blockingRule: blockingRule || "Allowed",
   };
+  // return {
+  //   url,
+  //   path,
+  //   robotsTxtUrl,
+  //   rule: blockingRule || "Allowed",
+  // };
 }
 
 module.exports = { checkRobotsTxt };
