@@ -7,7 +7,7 @@ const convertJsonToCsv = require("../utils/jsonToCsv");
 
 const router = express.Router();
 const uploadDir = path.join(__dirname, "../uploads");
-const downloadDir = path.join(__dirname, "../download"); // Path to download folder
+const downloadDir = path.join(__dirname, "../downloads"); // Path to download folder
 
 // Route to read CSV and check URLs
 router.get("/read/:filename", async (req, res) => {
