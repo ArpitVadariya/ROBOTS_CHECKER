@@ -28,6 +28,8 @@ router.get("/read/:filename", async (req, res) => {
   fs.createReadStream(filePath)
     .pipe(csv())
     .on("data", (data) => {
+      if (urls.length >= 500) return; // Stop adding URLs after 500
+
       let url = data["URL"] || data[Object.keys(data)[0]]; // Extract URL
 
       if (url) {
