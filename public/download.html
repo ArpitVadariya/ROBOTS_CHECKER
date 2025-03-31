@@ -8,12 +8,27 @@
   </head>
   <body class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-md">
-      <h2 class="text-2xl font-bold text-gray-700 mb-4">Your CSV file is ready!</h2>
-      <a href="/download">
-        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+      <h2 class="text-2xl font-bold text-gray-700 mb-4">
+        Your CSV file is ready!
+      </h2>
+      <a id="downloadLink" href="/download">
+        <button
+          id="downloadButton"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+        >
           Download File
         </button>
       </a>
     </div>
+
+    <script>
+      document
+        .getElementById("downloadButton")
+        .addEventListener("click", function () {
+          setTimeout(function () {
+            window.location.href = "/"; // Redirect to homepage after 3 seconds
+          }, 3000);
+        });
+    </script>
   </body>
 </html>
