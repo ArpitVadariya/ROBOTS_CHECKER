@@ -4,8 +4,10 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const checkURLRoute = require("./routes/checkURLs"); // Import checkURL route
+require("dotenv").config(); // Load environment variables from .env
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Use .env value or default to 3000
+const SECRET_KEY = process.env.SESSION_SECRET || "test_secret_key";
 const app = express();
 
 // Serve static files from "public" folder
@@ -14,7 +16,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Enable sessions
 app.use(
   session({
-    secret: "test_secret_key", // Use a secure key in production
+    secret: SECRET_KEY, // Use a secure key in production
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }, // Set to true if using HTTPS
