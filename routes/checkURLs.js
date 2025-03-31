@@ -6,8 +6,20 @@ const { checkRobotsTxt } = require("../utils/robotsCheck");
 const convertJsonToCsv = require("../utils/jsonToCsv");
 
 const router = express.Router();
-const uploadDir = path.join(__dirname, "../uploads");
-const downloadDir = path.join(__dirname, "../downloads"); // Path to download folder
+
+// Use environment variables for directory paths
+const UPLOADS_DIR =
+  process.env.UPLOADS_DIR || path.join(__dirname, "../uploads");
+const DOWNLOADS_DIR =
+  process.env.DOWNLOADS_DIR || path.join(__dirname, "../downloads");
+
+// Ensure 'uploads' and 'downloads' folders exist
+[UPLOADS_DIR, DOWNLOADS_DIR].forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`✅ Created missing directory: ${dir}`);
+  }
+});
 
 // Route to read CSV and check URLs
 router.get("/read/:filename", async (req, res) => {
