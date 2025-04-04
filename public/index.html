@@ -12,28 +12,49 @@
         Upload a CSV File
       </h2>
       <p class="text-sm text-gray-600 text-center mb-2">
-        Note: A maximum of the first 500 URLs from the uploaded CSV file will be checked.
+        Note: A maximum of the first 500 URLs from the uploaded CSV file will be
+        checked.
       </p>
       <form
         action="/upload"
         method="POST"
         enctype="multipart/form-data"
         class="space-y-4"
-        onsubmit="showLoading()"
+        onsubmit="prepareUrls()"
       >
+        <!-- CSV Upload Section -->
         <div>
           <label for="csvFile" class="block text-sm font-medium text-gray-600"
-            >Choose CSV File:</label
+            >Upload CSV File:</label
           >
           <input
             type="file"
+            id="csvFile"
             name="csvFile"
             accept=".csv"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
         </div>
 
+        <div class="text-center text-gray-600 font-bold">OR</div>
+
+        <!-- Manual URL Input Section -->
+        <div>
+          <label for="urlList" class="block text-sm font-medium text-gray-600"
+            >Enter URLs (one per line):</label
+          >
+          <textarea
+            id="urlList"
+            rows="5"
+            placeholder="Enter URLs here..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+          ></textarea>
+        </div>
+
+        <!-- Hidden input to store formatted URLs -->
+        <input type="hidden" name="manualUrls" id="manualUrls" />
+
+        <!-- Robots.txt File Input -->
         <div>
           <label
             for="robotsPath"
@@ -42,19 +63,19 @@
           >
           <input
             type="text"
+            id="robotsPath"
             name="robotsPath"
             placeholder="Enter robots.txt URL"
             required
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
         </div>
 
         <button
           type="submit"
-          id="uploadButton"
-          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
         >
-          Upload
+          Check URLs
         </button>
       </form>
 
@@ -62,8 +83,12 @@
       <div id="loading" class="hidden mt-4 text-center">
         <div class="flex justify-center items-center space-x-2">
           <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
-          <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-150"></div>
-          <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-300"></div>
+          <div
+            class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-150"
+          ></div>
+          <div
+            class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-300"
+          ></div>
         </div>
         <p class="text-gray-600 mt-2 text-sm">Processing your CSV file...</p>
       </div>
@@ -73,6 +98,14 @@
       function showLoading() {
         document.getElementById("loading").classList.remove("hidden");
         document.getElementById("uploadButton").disabled = true;
+      }
+      function prepareUrls() {
+        let urlText = document.getElementById("urlList").value.trim();
+        let urlsArray = urlText
+          .split("\n")
+          .map((url) => url.trim())
+          .filter((url) => url !== "");
+        document.getElementById("manualUrls").value = JSON.stringify(urlsArray);
       }
     </script>
   </body>
