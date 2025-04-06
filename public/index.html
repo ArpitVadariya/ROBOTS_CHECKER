@@ -20,7 +20,7 @@
         method="POST"
         enctype="multipart/form-data"
         class="space-y-4"
-        onsubmit="prepareUrls()"
+        onsubmit="prepareForm()"
       >
         <!-- CSV Upload Section -->
         <div>
@@ -97,8 +97,8 @@
     <script>
       function showLoading() {
         document.getElementById("loading").classList.remove("hidden");
-        document.getElementById("uploadButton").disabled = true;
       }
+
       function prepareUrls() {
         let urlText = document.getElementById("urlList").value.trim();
         let urlsArray = urlText
@@ -106,6 +106,11 @@
           .map((url) => url.trim())
           .filter((url) => url !== "");
         document.getElementById("manualUrls").value = JSON.stringify(urlsArray);
+      }
+
+      function prepareForm() {
+        prepareUrls();
+        showLoading(); // ✅ Show loading before form submits
       }
     </script>
   </body>
