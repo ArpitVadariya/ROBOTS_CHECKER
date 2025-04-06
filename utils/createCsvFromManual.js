@@ -17,20 +17,15 @@ function createCsvFromManual(urlsArray, uploadDir = "uploads") {
     const csvRows = ['"URLs"', ...urlsArray.map((url) => `"${url}"`)];
     const csvContent = csvRows.join("\n");
 
-    // Generate timestamped filename
-    const now = new Date();
-    const timestamp = now
-      .toISOString()
-      .replace(/T/, "-")
-      .replace(/:/g, "-")
-      .replace(/\..+/, "");
+    // ✅ Filename format: output-manual-urls-<timestamp>.csv
+    const timestamp = Date.now();
     const filename = `manual-urls-${timestamp}.csv`;
 
     const filePath = path.join(__dirname, "..", uploadDir, filename);
 
     fs.writeFile(filePath, csvContent, (err) => {
       if (err) return reject(err);
-      resolve(filename);
+      resolve(filename); // Just this name; don't prepend 'output-' again elsewhere
     });
   });
 }
