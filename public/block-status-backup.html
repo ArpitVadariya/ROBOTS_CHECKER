@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Robots.txt File Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+      <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">
+        Upload a CSV File
+      </h2>
+      <p class="text-sm text-gray-600 text-center mb-2">
+        Note: A maximum of the first 500 URLs from the uploaded CSV file will be
+        checked.
+      </p>
+      <!-- Example CSV Download Link -->
+      <div class="text-center mb-4">
+        <a
+          href="/example.csv"
+          download
+          class="text-blue-500 hover:underline text-sm font-medium"
+        >
+          Download Example CSV File
+        </a>
+      </div>
+      <form
+        action="/upload"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-4"
+        onsubmit="prepareForm()"
+      >
+        <!-- CSV Upload Section -->
+        <div>
+          <label for="csvFile" class="block text-sm font-medium text-gray-600"
+            >Upload CSV File:</label
+          >
+          <input
+            type="file"
+            id="csvFile"
+            name="csvFile"
+            accept=".csv"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+          />
+        </div>
+
+        <div class="text-center text-gray-600 font-bold">OR</div>
+
+        <!-- Manual URL Input Section -->
+        <div class="mt-1 text-center">
+          <a
+            href="/manual-example.jpg"
+            target="_blank"
+            class="text-blue-500 hover:underline text-xs font-medium"
+            >View Example Manual URL Input</a
+          >
+        </div>
+        <div>
+          <label for="urlList" class="block text-sm font-medium text-gray-600"
+            >Enter URLs (one per line):</label
+          >
+          <textarea
+            id="urlList"
+            rows="5"
+            placeholder="Enter URLs here..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+          ></textarea>
+        </div>
+
+        <!-- Hidden input to store formatted URLs -->
+        <input type="hidden" name="manualUrls" id="manualUrls" />
+
+        <!-- Robots.txt File Input -->
+        <div>
+          <label
+            for="robotsPath"
+            class="block text-sm font-medium text-gray-600"
+            >Robots.txt File URL:</label
+          >
+          <input
+            type="text"
+            id="robotsPath"
+            name="robotsPath"
+            placeholder="Enter robots.txt URL"
+            required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg"
+        >
+          Check URLs
+        </button>
+      </form>
+
+      <!-- Loading Animation (Initially Hidden) -->
+      <div id="loading" class="hidden mt-4 text-center">
+        <div class="flex justify-center items-center space-x-2">
+          <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
+          <div
+            class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-150"
+          ></div>
+          <div
+            class="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-300"
+          ></div>
+        </div>
+        <p class="text-gray-600 mt-2 text-sm">Processing your CSV file...</p>
+      </div>
+    </div>
+
+    <script>
+      function showLoading() {
+        document.getElementById("loading").classList.remove("hidden");
+      }
+
+      function prepareUrls() {
+        let urlText = document.getElementById("urlList").value.trim();
+        let urlsArray = urlText
+          .split("\n")
+          .map((url) => url.trim())
+          .filter((url) => url !== "");
+        document.getElementById("manualUrls").value = JSON.stringify(urlsArray);
+      }
+
+      function prepareForm() {
+        prepareUrls();
+        showLoading(); // ✅ Show loading before form submits
+      }
+    </script>
+  </body>
+</html>
