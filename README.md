@@ -16,13 +16,13 @@ Access the live application here: [robots-checker.onrender.com](https://robots-c
 
 ## Technologies Used
 
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) Node.js  
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) Express.js  
-![Multer](https://img.shields.io/badge/Multer-7B9F35?style=for-the-badge&logo=npm&logoColor=white) Multer  
-![CSV Parser](https://img.shields.io/badge/CSV%20Parser-005A71?style=for-the-badge&logo=npm&logoColor=white) CSV Parser  
-![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white) HTML  
-![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white) CSS  
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) JavaScript
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![Multer](https://img.shields.io/badge/Multer-7B9F35?style=for-the-badge&logo=npm&logoColor=white)
+![CSV Parser](https://img.shields.io/badge/CSV%20Parser-005A71?style=for-the-badge&logo=npm&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
 ## Installation
 
