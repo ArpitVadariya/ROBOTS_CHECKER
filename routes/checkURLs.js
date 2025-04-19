@@ -94,46 +94,6 @@ router.get("/read/:filename", async (req, res) => {
     });
 });
 
-// Function to generate a dynamic filename
-// const generateFileName = () => {
-//   const timestamp = Date.now(); // Get current timestamp
-//   return `output-manual-urls-${timestamp}.csv`; // Construct filename
-// };
-
-// router.get("/read/manual", async (req, res) => {
-//   const robotsPath = req.query.robotsPath;
-//   if (!robotsPath) {
-//     return res.status(400).send("robots.txt path is required.");
-//   }
-
-//   const urls = req.session.manualUrls || [];
-//   if (urls.length === 0) {
-//     return res.status(400).send("No URLs provided.");
-//   }
-
-//   console.log(`Checking ${urls.length} manually entered URLs...`);
-
-//   // Process URLs with the provided robots.txt path
-//   const results = await Promise.all(
-//     urls.map((url) => checkRobotsTxt(url, robotsPath))
-//   );
-
-//   console.log(`Finished checking ${urls.length} URLs.`);
-
-//   // Generate filename dynamically
-//   const outputFileName = generateFileName();
-//   const outputFilePath = path.join(downloadDir, outputFileName);
-
-//   // Convert JSON response to CSV
-//   convertJsonToCsv(results, outputFilePath);
-
-//   // Store the output file path in session for downloading later
-//   req.session.downloadFile = outputFileName;
-
-//   // Redirect to the download page
-//   res.redirect("/download.html");
-// });
-
 router.get("/download", (req, res) => {
   const fileName = req.session.downloadFile;
   if (!fileName) {
