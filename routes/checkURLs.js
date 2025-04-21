@@ -58,8 +58,7 @@ router.get("/read/:filename", async (req, res) => {
       }
     })
     .on("end", async () => {
-      console.log(`Finished reading ${urls.length} URLs from CSV.`);
-
+      // console.log(`Finished reading ${urls.length} URLs from CSV.`);
       // Process each URL with the provided robots.txt path
       const results = await Promise.all(
         urls.map((url) => checkRobotsTxt(url, robotsPath))
