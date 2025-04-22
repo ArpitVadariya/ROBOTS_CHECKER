@@ -65,14 +65,16 @@ router.get("/read/:filename", async (req, res) => {
       );
 
       console.log(`Finished checking ${urls.length} URLs.`);
-      // const responseData = results; // Store response in a const
+
+      // Store response in a const
+      // const responseData = results;
 
       // Generate dynamic output filename
       let baseFileName = req.params.filename.replace(/\.csv$/, "");
       const outputFileName = `output-${baseFileName}.csv`;
       const outputFilePath = path.join(downloadDir, outputFileName);
 
-      // Convert JSON response to CSV
+      // Convert Final JSON result response to CSV
       convertJsonToCsv(results, outputFilePath);
 
       // Ensure the download folder exists
@@ -83,7 +85,8 @@ router.get("/read/:filename", async (req, res) => {
       // Store the output file path in session or query for downloading later
       req.session.downloadFile = outputFileName;
 
-      // Redirect to the download page
+      // result data stored in session then Redirect to the download page
+      req.session.resultData = results;
       res.redirect("/download.html");
       // res.json(responseData);
     })

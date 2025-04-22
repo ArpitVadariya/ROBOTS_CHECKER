@@ -96,6 +96,7 @@ async function checkRobotsTxt(url, robotsTxtUrl) {
   const path = getPathFromUrl(url);
   const blockingRule = getBlockingRule(path, rules);
 
+  // Here result response of each url is returning
   return {
     url,
     blockingRule: blockingRule || "Allowed",
