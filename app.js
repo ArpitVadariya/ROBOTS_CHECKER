@@ -99,6 +99,15 @@ app.post("/upload", upload.single("csvFile"), async (req, res) => {
   }
 });
 
+// store the result data in json format
+app.get("/result", (req, res) => {
+  if (req.session.resultData) {
+    res.json(req.session.resultData); // Serve the result JSON
+  } else {
+    res.status(404).json({ error: "No result data found." });
+  }
+});
+
 // Use the checkURL route for CSV processing
 app.use(checkURLRoute);
 
